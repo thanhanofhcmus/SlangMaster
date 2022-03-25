@@ -1,13 +1,10 @@
 package com.slangmaster;
 
+import java.util.ArrayList;
+
 public class Main {
     public static void main(String[] args) {
-        Index index = new Index();
-
-        index.add("A", 1);
-        index.add("B", 2);
-        index.add("C", 3);
-
-        index.map.containsKey("A");
+        ArrayList<Slang> slangList = FileManager.readFile("sample.txt");
+        System.out.println(slangList.size());
     }
 }

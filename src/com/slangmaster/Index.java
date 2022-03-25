@@ -5,12 +5,11 @@ import java.util.HashMap;
 public class Index {
     public final HashMap<String, Integer> map = new HashMap<>();
 
-    public boolean add(String word, int position) {
+    public void add(String word, int position) {
         if (map.containsKey(word)) {
-            return false;
+            return;
         }
         map.put(word, position);
-        return true;
     }
 
     public int find(String word) {

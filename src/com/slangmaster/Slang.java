@@ -7,7 +7,7 @@ import java.util.Locale;
 
 public record Slang(String word, ArrayList<String> meanings) {
 
-    public Slang parse(String source) throws ParseException {
+    public static Slang parse(String source) throws ParseException {
         String[] parts = source.split("`");
 
         if (parts.length < 2) {
