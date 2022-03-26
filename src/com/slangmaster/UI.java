@@ -51,6 +51,19 @@ public class UI {
         interactor.pause();
     }
 
+    private void history() {
+        ArrayList<History.Item> items = database.history.getItems();
+        if (items.isEmpty()) {
+            println("Lich su tim kiem rong");
+        } else {
+            println("Lich su tim kiem");
+            for (final History.Item item : items) {
+                println(item.toString());
+            }
+        }
+        interactor.pause();
+    }
+
     void reset() {
         ArrayList<Slang> slangList = FileManager.readFile("slang_default.txt");
         database.reset(slangList);
@@ -78,6 +91,7 @@ public class UI {
         switch (cmd) {
             case 1 -> findByDefinition();
             case 2 -> findByMeaning();
+            case 3 -> history();
             case 7 -> reset();
             case 11 -> isRunning = false;
             default -> unimplemented();

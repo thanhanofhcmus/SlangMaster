@@ -48,15 +48,19 @@ public class Database {
     private Slang query(String word, Index index, Function<Slang, String> methodPref) {
         int pos = index.find(word);
         if (pos >= 0) {
-            return slangList.get(pos);
+            Slang slang = slangList.get(pos);
+            history.add(slang, word);
+            return slang;
         }
         for (int i = 0; i < slangList.size(); ++i) {
             Slang slang = slangList.get(i);
             if (methodPref.apply(slang).equals(word)) {
                 index.add(word, i);
+                history.add(slang, word);
                 return slang;
             }
         }
+        history.add(null, word);
         return null;
     }
 }
