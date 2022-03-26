@@ -1,14 +1,13 @@
 package com.slangmaster;
 
-import javax.management.MBeanRegistration;
-
 public class UI {
 
     final private Interactor interactor = new Interactor();
     private boolean isRunning = true;
+    final private Database database;
 
-    private static void print(String message) {
-        System.out.print(message);
+    UI(Database database) {
+        this.database = database;
     }
 
     private static void println(String message) {
@@ -24,6 +23,30 @@ public class UI {
         while (isRunning) {
             mainMenu();
         }
+    }
+
+    private void findByDefinition() {
+        String word = interactor.getString("Nhap tu khoa: ");
+        Slang slang = database.queryByDefinition(word);
+
+        if (slang != null) {
+            println(slang.toString());
+        } else {
+            println("Khong co trong tu dien");
+        }
+        interactor.pause();
+    }
+
+    private void findByMeaning() {
+        String word = interactor.getString("Nhap nghia: ");
+        Slang slang = database.queryByMeaning(word);
+
+        if (slang != null) {
+            println(slang.toString());
+        } else {
+            println("Khong co trong tu dien");
+        }
+        interactor.pause();
     }
 
     public void mainMenu() {
@@ -43,12 +66,10 @@ public class UI {
         int cmd = interactor.getInt("Nhap lenh: ", 11);
 
         switch (cmd) {
-            case 11:
-                isRunning = false;
-                break;
-            default:
-                unimplemented();
-                break;
+            case 1 -> findByDefinition();
+            case 2 -> findByMeaning();
+            case 11 -> isRunning = false;
+            default -> unimplemented();
         }
     }
 
