@@ -8,17 +8,20 @@ public class Database {
     final private ArrayList<Slang> slangList;
     final public Index definitionIndex;
     final public Index meaningIndex;
+    final public History history;
 
     Database(ArrayList<Slang> slangList) {
         this.slangList = slangList;
         this.definitionIndex = new Index();
         this.meaningIndex = new Index();
+        this.history = new History();
     }
 
-    Database(ArrayList<Slang> slangList, Index definitionIndex, Index meaningIndex) {
+    Database(ArrayList<Slang> slangList, Index definitionIndex, Index meaningIndex, History history) {
         this.slangList = slangList;
         this.definitionIndex = Objects.requireNonNullElse(definitionIndex, new Index());
         this.meaningIndex = Objects.requireNonNullElse(meaningIndex, new Index());
+        this.history = Objects.requireNonNullElse(history, new History());
     }
 
     public Slang queryByDefinition(String word) {
