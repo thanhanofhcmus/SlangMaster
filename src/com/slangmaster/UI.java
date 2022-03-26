@@ -1,12 +1,14 @@
 package com.slangmaster;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class UI {
 
     final private Interactor interactor = new Interactor();
     private boolean isRunning = true;
     final private Database database;
+    Random random = new Random();
 
     UI(Database database) {
         this.database = database;
@@ -64,11 +66,40 @@ public class UI {
         interactor.pause();
     }
 
+    private void random() {
+        println("Slang ngau nhien: " + database.randomSlang().toString());
+        interactor.pause();
+    }
+
     void reset() {
         ArrayList<Slang> slangList = FileManager.readFile("slang_default.txt");
         database.reset(slangList);
 
         println("Reset thanh cong");
+        interactor.pause();
+    }
+
+    void definitionQuiz() {
+        Slang[] slangs = {
+                database.randomSlang(),
+                database.randomSlang(),
+                database.randomSlang(),
+                database.randomSlang(),
+        };
+        int answer = random.nextInt(4);
+
+        println("Doan nghia cua tu khoa '" + slangs[answer].word() + "' : ");
+        for (int i = 0; i < slangs.length; ++i) {
+            println(String.format("%d: %s", i + 1, slangs[i].meaningsString()));
+        }
+
+        int cmd = interactor.getInt("Nhap dap an: ", 4);
+
+        if (cmd == answer + 1) {
+            println("Ban da tra loi dung!");
+        } else {
+            println("Ban da tra loi sai!");
+        }
         interactor.pause();
     }
 
@@ -93,6 +124,8 @@ public class UI {
             case 2 -> findByMeaning();
             case 3 -> history();
             case 7 -> reset();
+            case 8 -> random();
+            case 9 -> definitionQuiz();
             case 11 -> isRunning = false;
             default -> unimplemented();
         }

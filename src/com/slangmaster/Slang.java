@@ -23,12 +23,15 @@ public record Slang(String word, ArrayList<String> meanings) {
         );
     }
 
-    @Override
-    public String toString() {
-        String meaning = this.meanings
+    public String meaningsString() {
+        return this.meanings
                 .stream()
                 .reduce((acc, n) -> acc + " | " + n)
                 .orElse("<nil>");
-        return String.format(Locale.getDefault(), "%s || %s", this.word, meaning);
+    }
+
+    @Override
+    public String toString() {
+        return String.format(Locale.getDefault(), "%s || %s", this.word, this.meaningsString());
     }
 }

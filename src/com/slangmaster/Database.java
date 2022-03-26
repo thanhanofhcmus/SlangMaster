@@ -2,6 +2,7 @@ package com.slangmaster;
 
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Random;
 import java.util.function.Function;
 
 public class Database {
@@ -9,12 +10,14 @@ public class Database {
     public Index definitionIndex;
     public Index meaningIndex;
     public History history;
+    public Random random;
 
     Database(ArrayList<Slang> slangList) {
         this.slangList = slangList;
         this.definitionIndex = new Index();
         this.meaningIndex = new Index();
         this.history = new History();
+        this.random = new Random();
     }
 
     Database(ArrayList<Slang> slangList, Index definitionIndex, Index meaningIndex, History history) {
@@ -22,6 +25,7 @@ public class Database {
         this.definitionIndex = Objects.requireNonNullElse(definitionIndex, new Index());
         this.meaningIndex = Objects.requireNonNullElse(meaningIndex, new Index());
         this.history = Objects.requireNonNullElse(history, new History());
+        this.random = new Random();
     }
 
     public Slang queryByDefinition(String word) {
@@ -44,6 +48,10 @@ public class Database {
         this.definitionIndex = new Index();
         this.meaningIndex = new Index();
         this.history = new History();
+    }
+
+    public Slang randomSlang() {
+        return slangList.get(random.nextInt(slangList.size()));
     }
 
     private Slang query(String word, Index index, Function<Slang, String> methodPref) {
