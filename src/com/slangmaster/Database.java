@@ -5,9 +5,9 @@ import java.util.Objects;
 import java.util.function.Function;
 
 public class Database {
-    final private ArrayList<Slang> slangList;
-    final public Index definitionIndex;
-    final public Index meaningIndex;
+    private ArrayList<Slang> slangList;
+    public Index definitionIndex;
+    public Index meaningIndex;
     final public History history;
 
     Database(ArrayList<Slang> slangList) {
@@ -37,6 +37,12 @@ public class Database {
                         .findAny()
                         .orElse("")
         );
+    }
+
+    public void reset(ArrayList<Slang> slangList) {
+        this.slangList = slangList;
+        this.definitionIndex = new Index();
+        this.meaningIndex = new Index();
     }
 
     private Slang query(String word, Index index, Function<Slang, String> methodPref) {

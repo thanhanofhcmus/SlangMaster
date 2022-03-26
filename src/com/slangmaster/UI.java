@@ -1,5 +1,7 @@
 package com.slangmaster;
 
+import java.util.ArrayList;
+
 public class UI {
 
     final private Interactor interactor = new Interactor();
@@ -49,6 +51,14 @@ public class UI {
         interactor.pause();
     }
 
+    void reset() {
+        ArrayList<Slang> slangList = FileManager.readFile("slang_default.txt");
+        database.reset(slangList);
+
+        println("Reset thanh cong");
+        interactor.pause();
+    }
+
     public void mainMenu() {
         println("=== MENU ===");
         println("1. Tim kiem theo tu khoa");
@@ -68,6 +78,7 @@ public class UI {
         switch (cmd) {
             case 1 -> findByDefinition();
             case 2 -> findByMeaning();
+            case 7 -> reset();
             case 11 -> isRunning = false;
             default -> unimplemented();
         }
