@@ -8,7 +8,7 @@ public class Database {
     private ArrayList<Slang> slangList;
     public Index definitionIndex;
     public Index meaningIndex;
-    final public History history;
+    public History history;
 
     Database(ArrayList<Slang> slangList) {
         this.slangList = slangList;
@@ -43,6 +43,7 @@ public class Database {
         this.slangList = slangList;
         this.definitionIndex = new Index();
         this.meaningIndex = new Index();
+        this.history = new History();
     }
 
     private Slang query(String word, Index index, Function<Slang, String> methodPref) {
