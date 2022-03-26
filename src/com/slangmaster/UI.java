@@ -1,7 +1,9 @@
 package com.slangmaster;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Random;
+import java.util.function.Function;
 
 public class UI {
 
@@ -80,6 +82,14 @@ public class UI {
     }
 
     void definitionQuiz() {
+        quiz("Doan nghia cho tu slang '%s': ", Slang::word, Slang::meaningsString);
+    }
+
+    void meaningQuiz() {
+        quiz("Doan slang cho tu co nghia '%s': ", Slang::meaningsString, Slang::word);
+    }
+
+    void quiz(String question, Function<Slang, String> questionFunc, Function<Slang, String> answerFunc) {
         Slang[] slangs = {
                 database.randomSlang(),
                 database.randomSlang(),
@@ -88,18 +98,13 @@ public class UI {
         };
         int answer = random.nextInt(4);
 
-        println("Doan nghia cua tu khoa '" + slangs[answer].word() + "' : ");
+        println(String.format(Locale.getDefault(), question, questionFunc.apply(slangs[answer])));
         for (int i = 0; i < slangs.length; ++i) {
-            println(String.format("%d: %s", i + 1, slangs[i].meaningsString()));
+            println(String.format("%d: %s", i + 1, answerFunc.apply(slangs[i])));
         }
 
         int cmd = interactor.getInt("Nhap dap an: ", 4);
-
-        if (cmd == answer + 1) {
-            println("Ban da tra loi dung!");
-        } else {
-            println("Ban da tra loi sai!");
-        }
+        println("Ban da tra loi " + (cmd == answer + 1 ? "dung" : "sai") + "!");
         interactor.pause();
     }
 
@@ -126,6 +131,7 @@ public class UI {
             case 7 -> reset();
             case 8 -> random();
             case 9 -> definitionQuiz();
+            case 10 -> meaningQuiz();
             case 11 -> isRunning = false;
             default -> unimplemented();
         }
