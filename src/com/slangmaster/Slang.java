@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 public record Slang(String word, ArrayList<String> meanings) {
 
@@ -13,7 +14,13 @@ public record Slang(String word, ArrayList<String> meanings) {
         if (parts.length < 2) {
             throw new ParseException(source, 0);
         }
-        return new Slang(parts[0], new ArrayList<>(Arrays.asList(parts[1].split("\\|"))));
+
+        return new Slang(
+                parts[0].trim(),
+                new ArrayList<>(
+                        Arrays.stream(parts[1].split("\\|")).map(String::trim).collect(Collectors.toList())
+                )
+        );
     }
 
     @Override

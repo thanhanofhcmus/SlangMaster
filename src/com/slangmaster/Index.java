@@ -27,4 +27,8 @@ public class Index {
             return -1;
         }
     }
+
+    public int size() {
+        return map.size();
+    }
 }
