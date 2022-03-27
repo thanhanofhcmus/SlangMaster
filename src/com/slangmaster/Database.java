@@ -67,6 +67,31 @@ public class Database {
         slangList.add(slang);
     }
 
+    public boolean remove(String word) {
+        int pos = findIndex(word, (w, s) -> w.equals(s.word()));
+        if (pos < 0) {
+            return false;
+        }
+
+        removeFromIndex(definitionIndex, word, pos);
+        for (final String meaning : slangList.get(pos).meanings()) {
+            removeFromIndex(meaningIndex, meaning, pos);
+        }
+
+        slangList.remove(pos);
+        return true;
+    }
+
+    private void removeFromIndex(Index index, String word, int position) {
+        for (final var entry : index.map.entrySet()) {
+            if (entry.getValue() > position) {
+                entry.setValue(entry.getValue() - 1);
+            }
+        }
+        index.map.remove(word);
+
+    }
+
     public void reset(ArrayList<Slang> slangList) {
         this.slangList = slangList;
         this.definitionIndex = new Index();

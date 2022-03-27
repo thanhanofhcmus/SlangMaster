@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Objects;
 
 public class Index {
-    public final HashMap<String, Integer> map;
+    final HashMap<String, Integer> map;
 
     Index() {
         this.map = new HashMap<>();
@@ -33,17 +33,6 @@ public class Index {
 
     public int find(String word) {
         return map.getOrDefault(word, -1);
-    }
-
-    public int remove(String word) {
-        return map.remove(word);
-    }
-
-    public void update(String word, int position) {
-        try {
-            map.replace(word, position, 0);
-        } catch (NullPointerException ignored) {
-        }
     }
 
     public String toCSVList() {

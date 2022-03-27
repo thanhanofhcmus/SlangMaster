@@ -92,6 +92,16 @@ public class UI {
         println("Them slang vao tu dien thanh cong");
     }
 
+    private void removeSlang() {
+        String definition = interactor.getString("Nhap slang ban muon xoa: ");
+
+        if (database.remove(definition)) {
+            println("Xoa slang thanh cong");
+        } else {
+            println("Xoa slang that bai");
+        }
+    }
+
     private void random() {
         println("Slang ngau nhien: " + database.randomSlang().toString());
     }
@@ -157,6 +167,7 @@ public class UI {
             case 2 -> findByMeaning();
             case 3 -> history();
             case 4 -> addSlang();
+            case 6 -> removeSlang();
             case 7 -> reset();
             case 8 -> random();
             case 9 -> definitionQuiz();
@@ -165,7 +176,9 @@ public class UI {
             default -> unimplemented();
         }
 
-        interactor.pause();
+        if (isRunning) {
+            interactor.pause();
+        }
     }
 
 }
