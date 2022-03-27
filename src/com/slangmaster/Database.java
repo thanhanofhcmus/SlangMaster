@@ -7,11 +7,11 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public class Database {
+    public History history;
+    public Random random;
     private ArrayList<Slang> slangList;
     private Index definitionIndex;
     private Index meaningIndex;
-    public History history;
-    public Random random;
 
     Database(ArrayList<Slang> slangList, Index definitionIndex, Index meaningIndex, History history) {
         this.slangList = slangList;
@@ -33,14 +33,21 @@ public class Database {
         return meaningIndex;
     }
 
-    public <T> Slang find(T value, BiFunction<? super  T, Slang, Boolean> predicate) {
-        for (final Slang slang : slangList) {
-            if (predicate.apply(value, slang)) {
-                return slang;
+    private <T> int findIndex(T value, BiFunction<? super T, Slang, Boolean> predicate) {
+        for (int i = 0; i < slangList.size(); ++i) {
+            if (predicate.apply(value, slangList.get(i))) {
+                return i;
             }
         }
-        return null;
+        return -1;
     }
+
+
+    public <T> Slang find(T value, BiFunction<? super T, Slang, Boolean> predicate) {
+        int index = findIndex(value, predicate);
+        return index < 0 ? null : slangList.get(index);
+    }
+
     public Slang queryByDefinition(String word) {
         return query(word, definitionIndex, Slang::word);
     }
@@ -78,7 +85,11 @@ public class Database {
             history.add(slang, word);
             return slang;
         }
-        Slang slang = find(word, (w, s) -> methodPref.apply(s).equals(w));
+        pos = findIndex(word, (w, s) -> methodPref.apply(s).equals(w));
+        if (pos >= 0) {
+            index.add(word, pos);
+        }
+        Slang slang = pos >= 0 ? slangList.get(pos) : null;
         history.add(slang, word);
         return slang;
     }
