@@ -12,15 +12,15 @@ public class Interactor {
         this.reader = new BufferedReader(new InputStreamReader(System.in));
     }
 
+    private static void print(String message) {
+        System.out.print(message);
+    }
+
     public void pause() {
         try {
             this.reader.readLine();
         } catch (IOException ignored) {
         }
-    }
-
-    private static void print(String message) {
-        System.out.print(message);
     }
 
     public int getInt(String message, int limit) {

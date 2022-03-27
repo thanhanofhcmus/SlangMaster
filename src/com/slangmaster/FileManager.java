@@ -42,7 +42,7 @@ public class FileManager {
     public static Index readIndex(String filename) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             HashMap<String, Integer> map = new HashMap<>();
-            reader .lines()
+            reader.lines()
                     .map(Index::fromCSVItem)
                     .filter(Objects::nonNull)
                     .forEach(e -> map.put(e.getKey(), e.getValue()));

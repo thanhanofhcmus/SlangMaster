@@ -12,9 +12,9 @@ public class UI {
     final private String meaningsIndexFilename;
 
     final private Interactor interactor = new Interactor();
-    private boolean isRunning = true;
     final private Database database;
-    Random random = new Random();
+    final private Random random = new Random();
+    private boolean isRunning = true;
 
     UI(String slangFilename, String definitionIndexFilename, String meaningIndexFilename) {
         this.slangFilename = slangFilename;

@@ -5,13 +5,6 @@ import java.util.Locale;
 
 public class History {
 
-    public record Item(Slang slang, String searchTerm) {
-        @Override
-        public String toString() {
-            return String.format(Locale.getDefault(), "%s: %s", searchTerm, slang);
-        }
-    }
-
     final private ArrayList<Item> items;
 
     public History() {
@@ -28,5 +21,12 @@ public class History {
 
     public final ArrayList<Item> getItems() {
         return items;
+    }
+
+    public record Item(Slang slang, String searchTerm) {
+        @Override
+        public String toString() {
+            return String.format(Locale.getDefault(), "%s: %s", searchTerm, slang);
+        }
     }
 }

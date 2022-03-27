@@ -15,6 +15,15 @@ public class Index {
         this.map = Objects.requireNonNullElse(map, new HashMap<>());
     }
 
+    public static HashMap.Entry<String, Integer> fromCSVItem(String source) {
+        String[] parts = source.split(",");
+        try {
+            return Map.entry(Objects.requireNonNull(parts[0]), Integer.parseInt(parts[1]));
+        } catch (NullPointerException ignored) {
+            return null;
+        }
+    }
+
     public void add(String word, int position) {
         if (map.containsKey(word)) {
             return;
@@ -46,14 +55,5 @@ public class Index {
                     .append(System.lineSeparator());
         }
         return builder.toString();
-    }
-
-    public static HashMap.Entry<String, Integer> fromCSVItem(String source) {
-        String[] parts = source.split(",");
-        try {
-            return Map.entry(Objects.requireNonNull(parts[0]), Integer.parseInt(parts[1]));
-        } catch (NullPointerException ignored) {
-            return null;
-        }
     }
 }
