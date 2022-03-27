@@ -8,19 +8,16 @@ import java.util.stream.Collectors;
 
 public record Slang(String word, ArrayList<String> meanings) {
 
-    public static Slang parse(String source) throws ParseException {
+    public static Slang parse(String source) {
         String[] parts = source.split("`");
-
         if (parts.length < 2) {
-            throw new ParseException(source, 0);
+            return null;
         }
-
-        return new Slang(
-                parts[0].trim(),
-                new ArrayList<>(
-                        Arrays.stream(parts[1].split("\\|")).map(String::trim).collect(Collectors.toList())
-                )
-        );
+        return new Slang(parts[0].trim(), new ArrayList<>(
+                Arrays.stream(parts[1].split("\\|"))
+                        .map(String::trim)
+                        .collect(Collectors.toList())
+        ));
     }
 
     public String meaningsString() {
