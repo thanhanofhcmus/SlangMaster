@@ -35,7 +35,6 @@ public class UI {
 
     private void unimplemented() {
         println("Chuc nang nay chua duoc phat trien");
-        interactor.pause();
     }
 
     public void run() {
@@ -48,14 +47,12 @@ public class UI {
         String word = interactor.getString("Nhap tu khoa: ").trim();
         Slang slang = database.queryByDefinition(word.trim());
         println(slang != null ? slang.toString() : "Khong co trong tu dien!");
-        interactor.pause();
     }
 
     private void findByMeaning() {
         String word = interactor.getString("Nhap nghia: ").trim();
         Slang slang = database.queryByMeaning(word);
         println(slang != null ? slang.toString() : "Khong co trong tu dien!");
-        interactor.pause();
     }
 
     private void history() {
@@ -68,12 +65,35 @@ public class UI {
                 println(item.toString());
             }
         }
-        interactor.pause();
+    }
+
+    private void addSlang() {
+        String definition = interactor.getString("Nhap slang: ");
+
+        if (database.find(definition, (def, s) -> def.equals(s.word())) != null) {
+            println("Slang da co trong tu dien!");
+            return;
+        }
+
+        String meaning;
+        ArrayList<String> meanings = new ArrayList<>();
+
+        println("Nhap tung nghia cua slang. Nhan trong de bo qua");
+        while (true) {
+            meaning = interactor.getStringCanBeEmpty("Nhap nghia: ");
+            if (meaning.isBlank()) {
+                break;
+            }
+            meanings.add(meaning);
+        }
+
+        database.insertUnChecked(new Slang(definition, meanings));
+
+        println("Them slang vao tu dien thanh cong");
     }
 
     private void random() {
         println("Slang ngau nhien: " + database.randomSlang().toString());
-        interactor.pause();
     }
 
     private void reset() {
@@ -81,7 +101,6 @@ public class UI {
         database.reset(slangList);
 
         println("Reset thanh cong");
-        interactor.pause();
     }
 
     private void definitionQuiz() {
@@ -108,7 +127,6 @@ public class UI {
 
         int cmd = interactor.getInt("Nhap dap an: ", 4);
         println("Ban da tra loi " + (cmd == answer + 1 ? "dung" : "sai") + "!");
-        interactor.pause();
     }
 
     private void quit() {
@@ -138,6 +156,7 @@ public class UI {
             case 1 -> findByDefinition();
             case 2 -> findByMeaning();
             case 3 -> history();
+            case 4 -> addSlang();
             case 7 -> reset();
             case 8 -> random();
             case 9 -> definitionQuiz();
@@ -145,6 +164,8 @@ public class UI {
             case 11 -> quit();
             default -> unimplemented();
         }
+
+        interactor.pause();
     }
 
 }

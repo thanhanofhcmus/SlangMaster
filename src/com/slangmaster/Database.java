@@ -3,6 +3,7 @@ package com.slangmaster;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Random;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public class Database {
@@ -32,6 +33,14 @@ public class Database {
         return meaningIndex;
     }
 
+    public <T> Slang find(T value, BiFunction<? super  T, Slang, Boolean> predicate) {
+        for (final Slang slang : slangList) {
+            if (predicate.apply(value, slang)) {
+                return slang;
+            }
+        }
+        return null;
+    }
     public Slang queryByDefinition(String word) {
         return query(word, definitionIndex, Slang::word);
     }
@@ -47,6 +56,10 @@ public class Database {
         );
     }
 
+    public void insertUnChecked(Slang slang) {
+        slangList.add(slang);
+    }
+
     public void reset(ArrayList<Slang> slangList) {
         this.slangList = slangList;
         this.definitionIndex = new Index();
@@ -58,22 +71,15 @@ public class Database {
         return slangList.get(random.nextInt(slangList.size()));
     }
 
-    private Slang query(String word, Index index, Function<Slang, String> methodPref) {
+    private Slang query(String word, Index index, final Function<Slang, String> methodPref) {
         int pos = index.find(word);
         if (pos >= 0) {
             Slang slang = slangList.get(pos);
             history.add(slang, word);
             return slang;
         }
-        for (int i = 0; i < slangList.size(); ++i) {
-            Slang slang = slangList.get(i);
-            if (methodPref.apply(slang).equals(word)) {
-                index.add(word, i);
-                history.add(slang, word);
-                return slang;
-            }
-        }
-        history.add(null, word);
-        return null;
+        Slang slang = find(word, (w, s) -> methodPref.apply(s).equals(w));
+        history.add(slang, word);
+        return slang;
     }
 }

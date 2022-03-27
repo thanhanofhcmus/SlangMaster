@@ -12,7 +12,7 @@ public class Index {
     }
 
     Index(HashMap<String, Integer> map) {
-        this.map = map;
+        this.map = Objects.requireNonNullElse(map, new HashMap<>());
     }
 
     public void add(String word, int position) {
@@ -30,11 +30,10 @@ public class Index {
         return map.remove(word);
     }
 
-    public int update(String word, int position) {
+    public void update(String word, int position) {
         try {
-            return map.replace(word, position);
+            map.replace(word, position, 0);
         } catch (NullPointerException ignored) {
-            return -1;
         }
     }
 
