@@ -7,8 +7,8 @@ import java.util.function.Function;
 
 public class Database {
     private ArrayList<Slang> slangList;
-    public Index definitionIndex;
-    public Index meaningIndex;
+    private Index definitionIndex;
+    private Index meaningIndex;
     public History history;
     public Random random;
 
@@ -18,6 +18,18 @@ public class Database {
         this.meaningIndex = Objects.requireNonNullElse(meaningIndex, new Index());
         this.history = Objects.requireNonNullElse(history, new History());
         this.random = new Random();
+    }
+
+    public ArrayList<Slang> getSlangList() {
+        return slangList;
+    }
+
+    public Index getDefinitionIndex() {
+        return definitionIndex;
+    }
+
+    public Index getMeaningIndex() {
+        return meaningIndex;
     }
 
     public Slang queryByDefinition(String word) {

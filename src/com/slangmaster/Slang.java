@@ -29,6 +29,6 @@ public record Slang(String word, ArrayList<String> meanings) {
 
     @Override
     public String toString() {
-        return String.format(Locale.getDefault(), "%s || %s", this.word, this.meaningsString());
+        return String.format(Locale.getDefault(), "%s`%s", this.word, this.meaningsString());
     }
 }

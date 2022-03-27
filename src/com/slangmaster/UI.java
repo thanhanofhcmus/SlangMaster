@@ -7,6 +7,7 @@ import java.util.function.Function;
 
 public class UI {
 
+    final private String slangFilename;
     final private String definitionIndexFilename;
     final private String meaningsIndexFilename;
 
@@ -16,11 +17,12 @@ public class UI {
     Random random = new Random();
 
     UI(String slangFilename, String definitionIndexFilename, String meaningIndexFilename) {
+        this.slangFilename = slangFilename;
         this.definitionIndexFilename = definitionIndexFilename;
         this.meaningsIndexFilename = meaningIndexFilename;
 
         this.database = new Database(
-                FileManager.readFile(slangFilename),
+                FileManager.readSlangList(slangFilename),
                 FileManager.readIndex(definitionIndexFilename),
                 FileManager.readIndex(meaningIndexFilename),
                 null
@@ -75,7 +77,7 @@ public class UI {
     }
 
     private void reset() {
-        ArrayList<Slang> slangList = FileManager.readFile("slang_default.txt");
+        ArrayList<Slang> slangList = FileManager.readSlangList(Constants.DEFAULT_SLANG_FILENAME);
         database.reset(slangList);
 
         println("Reset thanh cong");
@@ -111,8 +113,9 @@ public class UI {
 
     private void quit() {
         isRunning = false;
-        FileManager.writeIndex(definitionIndexFilename, this.database.definitionIndex);
-        FileManager.writeIndex(meaningsIndexFilename, this.database.meaningIndex);
+        FileManager.writeSlangList(slangFilename, this.database.getSlangList());
+        FileManager.writeIndex(definitionIndexFilename, this.database.getDefinitionIndex());
+        FileManager.writeIndex(meaningsIndexFilename, this.database.getMeaningIndex());
     }
 
     private void mainMenu() {
