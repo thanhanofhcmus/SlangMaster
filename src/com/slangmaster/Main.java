@@ -3,7 +3,11 @@ package com.slangmaster;
 public class Main {
 
     public static void main(String[] args) {
-        UI ui = new UI(new Database(FileManager.readFile("sample.txt")));
+        UI ui = new UI(
+                Constants.SAMPLE_SLANG_FILENAME,
+                Constants.DEFINITION_INDEX_FILENAME,
+                Constants.MEANINGS_INDEX_FILENAME
+        );
         ui.run();
     }
 }

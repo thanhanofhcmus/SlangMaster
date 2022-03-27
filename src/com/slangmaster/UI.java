@@ -7,13 +7,24 @@ import java.util.function.Function;
 
 public class UI {
 
+    final private String definitionIndexFilename;
+    final private String meaningsIndexFilename;
+
     final private Interactor interactor = new Interactor();
     private boolean isRunning = true;
     final private Database database;
     Random random = new Random();
 
-    UI(Database database) {
-        this.database = database;
+    UI(String slangFilename, String definitionIndexFilename, String meaningIndexFilename) {
+        this.definitionIndexFilename = definitionIndexFilename;
+        this.meaningsIndexFilename = meaningIndexFilename;
+
+        this.database = new Database(
+                FileManager.readFile(slangFilename),
+                FileManager.readIndex(definitionIndexFilename),
+                FileManager.readIndex(meaningIndexFilename),
+                null
+        );
     }
 
     private static void println(String message) {
@@ -32,26 +43,16 @@ public class UI {
     }
 
     private void findByDefinition() {
-        String word = interactor.getString("Nhap tu khoa: ");
-        Slang slang = database.queryByDefinition(word);
-
-        if (slang != null) {
-            println(slang.toString());
-        } else {
-            println("Khong co trong tu dien");
-        }
+        String word = interactor.getString("Nhap tu khoa: ").trim();
+        Slang slang = database.queryByDefinition(word.trim());
+        println(slang != null ? slang.toString() : "Khong co trong tu dien!");
         interactor.pause();
     }
 
     private void findByMeaning() {
-        String word = interactor.getString("Nhap nghia: ");
+        String word = interactor.getString("Nhap nghia: ").trim();
         Slang slang = database.queryByMeaning(word);
-
-        if (slang != null) {
-            println(slang.toString());
-        } else {
-            println("Khong co trong tu dien");
-        }
+        println(slang != null ? slang.toString() : "Khong co trong tu dien!");
         interactor.pause();
     }
 
@@ -73,7 +74,7 @@ public class UI {
         interactor.pause();
     }
 
-    void reset() {
+    private void reset() {
         ArrayList<Slang> slangList = FileManager.readFile("slang_default.txt");
         database.reset(slangList);
 
@@ -81,15 +82,15 @@ public class UI {
         interactor.pause();
     }
 
-    void definitionQuiz() {
+    private void definitionQuiz() {
         quiz("Doan nghia cho tu slang '%s': ", Slang::word, Slang::meaningsString);
     }
 
-    void meaningQuiz() {
+    private void meaningQuiz() {
         quiz("Doan slang cho tu co nghia '%s': ", Slang::meaningsString, Slang::word);
     }
 
-    void quiz(String question, Function<Slang, String> questionFunc, Function<Slang, String> answerFunc) {
+    private void quiz(String question, Function<Slang, String> questionFunc, Function<Slang, String> answerFunc) {
         Slang[] slangs = {
                 database.randomSlang(),
                 database.randomSlang(),
@@ -108,7 +109,13 @@ public class UI {
         interactor.pause();
     }
 
-    public void mainMenu() {
+    private void quit() {
+        isRunning = false;
+        FileManager.writeIndex(definitionIndexFilename, this.database.definitionIndex);
+        FileManager.writeIndex(meaningsIndexFilename, this.database.meaningIndex);
+    }
+
+    private void mainMenu() {
         println("=== MENU ===");
         println("1. Tim kiem theo tu khoa");
         println("2. Tim kiem theo nghia");
@@ -132,7 +139,7 @@ public class UI {
             case 8 -> random();
             case 9 -> definitionQuiz();
             case 10 -> meaningQuiz();
-            case 11 -> isRunning = false;
+            case 11 -> quit();
             default -> unimplemented();
         }
     }

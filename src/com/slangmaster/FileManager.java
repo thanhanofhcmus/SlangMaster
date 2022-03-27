@@ -18,7 +18,7 @@ public class FileManager {
         }
     }
 
-    public static void storeIndex(String filename, Index index) {
+    public static void writeIndex(String filename, Index index) {
         try (BufferedWriter writer = new BufferedWriter((new FileWriter(filename)))) {
             writer.write(index.toCSVList());
         } catch (IOException ignored) {

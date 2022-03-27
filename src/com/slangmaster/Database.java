@@ -12,14 +12,6 @@ public class Database {
     public History history;
     public Random random;
 
-    Database(ArrayList<Slang> slangList) {
-        this.slangList = slangList;
-        this.definitionIndex = new Index();
-        this.meaningIndex = new Index();
-        this.history = new History();
-        this.random = new Random();
-    }
-
     Database(ArrayList<Slang> slangList, Index definitionIndex, Index meaningIndex, History history) {
         this.slangList = slangList;
         this.definitionIndex = Objects.requireNonNullElse(definitionIndex, new Index());
