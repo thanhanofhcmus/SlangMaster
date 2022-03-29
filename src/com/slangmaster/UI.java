@@ -69,7 +69,6 @@ public class UI {
 
     private void addSlang() {
         String definition = interactor.getString("Nhap slang: ");
-
         if (database.find(definition, (def, s) -> def.equals(s.word())) != null) {
             println("Slang da co trong tu dien!");
             return;
@@ -92,9 +91,21 @@ public class UI {
         println("Them slang vao tu dien thanh cong");
     }
 
+
+    private void modifySlang() {
+        String definition = interactor.getString("Nhap slang: ");
+        Slang oldSlang = database.find(definition, (def, s) -> def.equals(s.word()));
+        if (oldSlang == null) {
+            println("Slang khong co trong!");
+            return;
+        }
+        database.remove(definition);
+
+        addSlang();
+    }
+
     private void removeSlang() {
         String definition = interactor.getString("Nhap slang ban muon xoa: ");
-
         if (database.remove(definition)) {
             println("Xoa slang thanh cong");
         } else {
@@ -152,7 +163,7 @@ public class UI {
         println("2. Tim kiem theo nghia");
         println("3. Xem lich su tim kiem");
         println("4. Them slang");
-        println("5. Xua slang");
+        println("5. Sua slang");
         println("6. Xoa slang");
         println("7. Reset danh sach slang word");
         println("8. Ngau nhien mot slang word");
@@ -167,6 +178,7 @@ public class UI {
             case 2 -> findByMeaning();
             case 3 -> history();
             case 4 -> addSlang();
+            case 5 -> modifySlang();
             case 6 -> removeSlang();
             case 7 -> reset();
             case 8 -> random();
